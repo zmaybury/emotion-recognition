@@ -1,0 +1,30 @@
+{
+  "name": "my-razzle-app",
+  "version": "2.0.0-alpha.8",
+  "license": "MIT",
+  "scripts": {
+    "start": "razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom",
+    "start:prod": "NODE_ENV=production node build/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "canvas": "^2.2.0",
+    "child-process": "^1.0.2",
+    "express": "^4.16.4",
+    "express-fileupload": "^1.0.0",
+    "face-recognition": "^0.9.4",
+    "fs": "0.0.1-security",
+    "libsvm-js": "^0.2.1",
+    "path": "^0.12.7",
+    "razzle": "^2.4.0",
+    "razzle-plugin-typescript": "^2.4.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1"
+  },
+  "devDependencies": {
+    "tslint-config-airbnb": "^5.11.1"
+  }
+}
