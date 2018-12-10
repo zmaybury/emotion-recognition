@@ -4,8 +4,9 @@ A universal JavaScript applications for expression recognition, utilizing:
 * Express
 * Razzle
 * Face Recognition
-* LibSVM
 * OpenCV
+* LibSVM
+* TensorFlow
 
 **This Application Includes**:
 
