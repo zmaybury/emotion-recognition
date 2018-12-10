@@ -3,75 +3,14 @@ import React from 'react';
 import { StaticRouter } from 'react-router-dom';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
-import fr from 'face-recognition';
-import fs from 'fs';
-import path from 'path';
-import services from './services';
-import {drawPredictions} from './utils/imageUtils';
+import api from './api';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 server.use(require('body-parser').json({ limit: '10mb' }));
 
-const tempDir = `${process.cwd()}`;
-const tempImageName = path.join(tempDir, 'temp','tempUpload.jpg');
-const resultImageName = path.join(tempDir, 'temp','result.jpg');
-
-server.post('/faces', async (req, res) => {
-  const img = fr.loadImage(tempImageName);
-  const detector = fr.FaceDetector();
-  const predictorFive = fr.FaceLandmark5Predictor();
-  const predictorSixtyEight = fr.FaceLandmark68Predictor()
-  const faceRectangles = detector.locateFaces(img);
-  const faceImages = detector.detectFaces(img);
-
-  fr.tileImages(faceImages)
-
-  const frontalFaceDetector = new fr.FrontalFaceDetector();
-  const faceRects = frontalFaceDetector.detect(img);
-  const faceShapesPredictorFive = faceRects.map(rect => predictorFive.predict(img, rect));
-  const faceShapesPredictorSixtyEight = faceRects.map(rect => predictorSixtyEight.predict(img, rect));
-
-  const faceShapesPredictorFivePoints = faceShapesPredictorFive.map(prediction => prediction.getParts());
-  const faceShapesPredictorSixtyEightPoints = faceShapesPredictorSixtyEight.map(prediction => prediction.getParts());
-
-  drawPredictions(tempImageName, img, faceRects[0], faceShapesPredictorFivePoints[0], faceShapesPredictorSixtyEightPoints[0])
-  .then((resultImage) => {
-    var data = resultImage.replace(/^data:image\/\w+;base64,/, "");
-    var buf = new Buffer(data, 'base64');
-    fs.writeFileSync(resultImageName, buf);
-    
-    res.status(200).json({
-      img,
-      resultImage,
-      faceRectangles,
-      faceRects,
-      faceImages,
-      predictorFive: {
-        faceShapesPredictorFive,
-        faceShapesPredictorFivePoints
-      },
-      predictorSixtyEight: {
-        faceShapesPredictorSixtyEight,
-        faceShapesPredictorSixtyEightPoints
-      }
-    });
-  })
-});
-
-server.post('/tempUploadImage', function(req, res) {
-  const image = req.body.image;
-  if (!image) {
-    return res.status(422).send('No image was uploaded.');
-  }
-  
-  var data = image.replace(/^data:image\/\w+;base64,/, "");
-  var buf = new Buffer(data, 'base64');
-  fs.writeFileSync(tempImageName, buf);
-
-  return res.status(200).send(image);
-});
+server.use('/api', api);
 
 server
   .disable('x-powered-by')

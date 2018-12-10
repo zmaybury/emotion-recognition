@@ -11,10 +11,6 @@ export const base64Encode = (file) => {
   });
 }
 
-export const genericFetchRequest = () => {
-
-}
-
 export const uploadImage = (image) => {
   return base64Encode(image)
   .then((encodedImage) => {
@@ -31,7 +27,7 @@ export const uploadImage = (image) => {
       })
     };
   
-    return fetch(getServiceURI('tempUploadImage'), myInit);
+    return fetch(getServiceURI('api/tempUploadImage'), myInit);
   })
   .then((response) => {
     return base64Encode(image)
@@ -44,7 +40,7 @@ export const uploadImage = (image) => {
   });
 }
 
-export const detectFaces = (image, endpoint) => {
+export const detectFaces = (image) => {
   let myHeaders = new Headers();
   myHeaders.append('Content-Type', 'application/json');
 
@@ -58,13 +54,31 @@ export const detectFaces = (image, endpoint) => {
     })
   };
 
-  return fetch(getServiceURI('faces'), myInit)
+  return fetch(getServiceURI('api/faces'), myInit)
+  .then((response) => response.json());
+}
+
+export const detectFacesAndEmotion = (image) => {
+  let myHeaders = new Headers();
+  myHeaders.append('Content-Type', 'application/json');
+
+  const myInit = { 
+    method: 'POST',
+    headers: myHeaders,
+    mode: 'cors',
+    cache: 'default',
+    body: JSON.stringify({
+      imgBase64: image
+    })
+  };
+
+  return fetch(getServiceURI('api/facesAndEmotion'), myInit)
   .then((response) => response.json());
 }
 
 export default {
-    genericFetchRequest,
     getServiceURI,
     uploadImage,
-    detectFaces
+    detectFaces,
+    detectFacesAndEmotion
 };
