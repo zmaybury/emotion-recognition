@@ -8,7 +8,7 @@ A universal JavaScript applications for expression recognition, utilizing:
 * LibSVM
 * TensorFlow
 
-##Application Architecture
+## Application Architecture
 ![application architecture](Application_Architecture.png)
 
 **This Application Includes**:
