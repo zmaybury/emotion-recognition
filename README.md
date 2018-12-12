@@ -1,4 +1,4 @@
-A universal JavaScript applications for expression recognition, utilizing:
+A universal Javascript application for expression recognition, utilizing:
 
 * Node.JS
 * Express
